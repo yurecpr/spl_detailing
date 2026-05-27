@@ -264,6 +264,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 .about__text { display: flex; flex-direction: column; gap: 1.1rem; }
 .about__text p { color: rgba(255,255,255,.75); line-height: 1.75; }
 .about__text strong { color: var(--white); }
+.about__link { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
+.about__link:hover { color: #ff3b3b; }
 .about__chips { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
 .about__chip {
   background: var(--bg-3); border: 1px solid var(--border); border-radius: 20px;
