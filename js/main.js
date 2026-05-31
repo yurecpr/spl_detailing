@@ -131,6 +131,19 @@
     statusEl.className = 'form__status ' + type;
   };
 
+  const sendCustomerConfirmation = async (endpoint, payload) => {
+    if (!endpoint) return;
+    try {
+      await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } catch {
+      // The lead is already saved via Web3Forms; do not fail UX if confirmation mail fails.
+    }
+  };
+
   if (form) {
     form.addEventListener('submit', async e => {
       e.preventDefault();
@@ -145,6 +158,7 @@
       setStatus('', '');
       const json = {};
       new FormData(form).forEach((v, k) => (json[k] = v));
+      const confirmEndpoint = (form.dataset.confirmEndpoint || '').trim();
       try {
         const res = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
@@ -153,6 +167,12 @@
         });
         const result = await res.json();
         if (result.success) {
+          await sendCustomerConfirmation(confirmEndpoint, {
+            name,
+            email: $('#email').value.trim(),
+            phone,
+            service: ($('#service').value || '').trim(),
+          });
           setStatus('✓ Danke! Ihre Anfrage ist angekommen. Wir melden uns bald.', 'success');
           form.reset();
         } else {
